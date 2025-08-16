@@ -10,6 +10,7 @@ import time
 import requests
 from typing import Dict, Any, Optional
 from java_mermaid.extractors.java_code_extractor import JavaCodeContext
+from java_mermaid.core.prompt_manager import PromptManager
 
 
 class LLMClient:
@@ -18,87 +19,6 @@ class LLMClient:
     
     Handles API calls, retries, rate limiting, and Mermaid syntax validation.
     """
-    
-    # Java method context prompt template for LLM
-    JAVA_METHOD_PROMPT = """
-Analyze this Java method and generate a Mermaid flowchart.
-
-Class: {class_name}
-Method: {method_name}
-Signature: {method_signature}
-Return Type: {return_type}
-Parameters: {parameters}
-Annotations: {annotations}
-Modifiers: {modifiers}
-
-Imports:
-{imports}
-
-Class Fields:
-{class_fields}
-
-Source code:
-{method_body}
-
-Important Java constructs to include:
-1. if/else if/else statements
-2. for/while/do-while loops
-3. try/catch/finally blocks
-4. switch statements
-5. return statements
-6. exception handling paths
-7. method calls (show as process boxes)
-8. Stream operations (.map(), .filter(), .collect())
-9. Lambda expressions
-10. Generic type flows
-11. Resource management (try-with-resources)
-12. Synchronized blocks
-13. Thread operations
-14. I/O operations
-
-Generate a flowchart TD diagram that shows all possible execution paths.
-Use appropriate shapes:
-- Rectangle [Process] for operations and return statements
-- Diamond {{Decision}} for conditions
-- Circle (Start/End) for start and end nodes
-- Parallelogram [/Input/Output/] for I/O operations and return statements
-- Subroutine [[Subroutine]] for method calls
-- Database [(Database)] for persistence operations
-
-Special formatting requirements:
-- Use <br/> for line breaks in complex conditions instead of \n
-- Use || instead of | for labeling decision branches (e.g., B -->||true|| C)
-- For return statements, use parallelogram shape: [/"return value"/]
-- For complex conditions, break them with <br/> for better readability
-- Start node should be (Start) and end node should be (End)
-- Use ||true|| and ||false|| for boolean conditions
-- Use short, concise labels for nodes
-
-Include Java-specific elements:
-- Exception handling paths with different catch blocks
-- Stream pipeline visualization
-- Lambda expression flow
-- Generic type parameter handling
-- Resource cleanup in finally blocks
-- Thread synchronization points
-
-Example of expected output format:
-flowchart TD
-    A(Start) --> B{{username == null ||<br/>username.isEmpty()}}
-    B -->||true|| C[/"return \"Invalid username\""/]
-    B -->||false|| D{{password == null ||<br/>password.length() < 8}}
-    C --> E(End)
-    D -->||true|| F[/"return \"Password too short\""/]
-    D -->||false|| G{{!password.matches<br/>(".*[A-Z].*")}}
-    F --> E
-    G -->||true|| H[/"return \"Missing uppercase letter\""/]
-    G -->||false|| I[/"return \"Valid user\""/]
-    H --> E
-    I --> E
-
-Keep the diagram readable and well-structured.
-Return only valid Mermaid syntax, no explanations or markdown formatting.
-"""
     
     def __init__(
         self,
@@ -126,6 +46,9 @@ Return only valid Mermaid syntax, no explanations or markdown formatting.
         self.timeout = timeout
         self.max_retries = max_retries
         self.verbose = verbose
+        
+        # Initialize prompt manager
+        self.prompt_manager = PromptManager()
         
         # Ensure API key is provided
         if not self.api_key:
@@ -215,7 +138,10 @@ Return only valid Mermaid syntax, no explanations or markdown formatting.
         # Format modifiers
         modifiers_str = ', '.join(context_dict['modifiers']) if context_dict['modifiers'] else "None"
         
-        return self.JAVA_METHOD_PROMPT.format(
+        # Get prompt template from prompt manager
+        prompt_template = self.prompt_manager.get_java_method_prompt()
+        
+        return prompt_template.format(
             class_name=context_dict['class_name'],
             method_name=context_dict['method_name'],
             method_signature=context_dict['method_signature'],

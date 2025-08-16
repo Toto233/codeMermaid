@@ -21,35 +21,59 @@ public class TestSampleNew {
     /**
      * Method flowchart visualization.
      *
+    /**
+     * Method flowchart visualization.
+     *
+    /**
+     * Method flowchart visualization.
+     *
+    /**
+     * Method flowchart visualization.
+     *
      * @mermaid
      * ```mermaid
      * flowchart TD
-     * Start((Start))
-     * End((End))
-     * Start --> ValidateInput{input == null\nor input.isEmpty()?}
-     * ValidateInput -->|Yes| ThrowException[[throw IllegalArgumentException]]
-     * ValidateInput -->|No| SwitchValue{switch (value)}
-     * SwitchValue -->|1| ProcessSingle[[result = processSingleValue(input)]]
-     * SwitchValue -->|2| ProcessDouble[[result = processDoubleValue(input)]]
-     * SwitchValue -->|default| ProcessMultiple[[result = processMultipleValues(value, input)]]
-     * ProcessSingle --> InitLoop
-     * ProcessDouble --> InitLoop
-     * ProcessMultiple --> InitLoop
-     * InitLoop[/i = 0/] --> LoopCheck{i < value?}
-     * LoopCheck -->|Yes| Concat[[result += "_" + i]]
-     * Concat --> EvenCheck{i % 2 == 0?}
-     * EvenCheck -->|Yes| Upper[[result = result.toUpperCase()]]
-     * EvenCheck -->|No| Lower[[result = result.toLowerCase()]]
-     * Upper --> Increment[/i++/]
-     * Lower --> Increment
-     * Increment --> LoopCheck
-     * LoopCheck -->|No| TryBlock
-     * TryBlock[[result = riskyOperation(result)]] --> FinallyBlock
-     * TryBlock -.->|RuntimeException| CatchBlock[[result = "error"]]
-     * CatchBlock --> FinallyBlock
-     * FinallyBlock[/counter++/] --> ReturnResult[/return result/]
-     * ReturnResult --> End
-     * ThrowException --> End
+     * Start((开始))
+     * ValidateInput{输入是否为空}
+     * ThrowEx[抛出IllegalArgumentException]
+     * SwitchValue{value值}
+     * ProcSingle[调用processSingleValue]
+     * ProcDouble[调用processDoubleValue]
+     * ProcMulti[调用processMultipleValues]
+     * InitLoop[/i初始化为0/]
+     * CheckLoop{i < value}
+     * AppendIndex[追加“_i”]
+     * CheckEven{i为偶数}
+     * ToUpper[转大写]
+     * ToLower[转小写]
+     * IncrI[/i自增/]
+     * TryRisky{try riskyOperation}
+     * CatchEx[捕获RuntimeException并置result为“error”]
+     * IncrCounter[counter自增]
+     * End((返回result))
+     * Start --> ValidateInput
+     * ValidateInput -->|是| ThrowEx
+     * ValidateInput -->|否| SwitchValue
+     * ThrowEx -.-> End
+     * SwitchValue -->|1| ProcSingle
+     * SwitchValue -->|2| ProcDouble
+     * SwitchValue -->|其他| ProcMulti
+     * ProcSingle --> InitLoop
+     * ProcDouble --> InitLoop
+     * ProcMulti --> InitLoop
+     * InitLoop --> CheckLoop
+     * CheckLoop -->|是| AppendIndex
+     * AppendIndex --> CheckEven
+     * CheckEven -->|是| ToUpper
+     * CheckEven -->|否| ToLower
+     * ToUpper --> IncrI
+     * ToLower --> IncrI
+     * IncrI --> CheckLoop
+     * CheckLoop -->|否| TryRisky
+     * TryRisky -->|正常| IncrCounter
+     * TryRisky -.->|异常| CatchEx
+     * CatchEx --> IncrCounter
+     * IncrCounter --> End
      * ```
      *
      * To extract clean Mermaid code:
