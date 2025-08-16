@@ -1,0 +1,20 @@
+# Java Mermaid Flowchart Generator Requirements
+# Python 3.6+ compatible
+
+# Core dependencies
+javalang==0.13.1
+requests==2.27.1
+click==8.0.4
+
+# Optional dependencies for PNG generation
+# mermaid-cli should be installed separately via npm:
+# npm install -g @mermaid-js/mermaid-cli
+
+# Development dependencies (optional)
+pytest==6.2.5
+pytest-cov==3.0.0
+black==22.8.0
+flake8==4.0.1
+
+# Note: For Python 3.6 compatibility, we use older versions
+# that still support this Python version

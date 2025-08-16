@@ -1,0 +1,8 @@
+#!/bin/bash
+# Java Mermaid Flowchart Generator CLI wrapper script
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Run the Python module
+python3 -m java_mermaid "$@"
