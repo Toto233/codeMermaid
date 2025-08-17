@@ -415,11 +415,18 @@ class MermaidPNGGenerator:
                     driver.quit()
                     
             finally:
+                # Keep HTML file for debugging - save it to the output directory
+                debug_html_path = os.path.join(self.output_dir, f"{os.path.splitext(os.path.basename(filepath))[0]}_debug.html")
+                try:
+                    with open(debug_html_path, 'w', encoding='utf-8') as f:
+                        f.write(html_content)
+                    self.logger.info(f"Debug HTML file saved to: {debug_html_path}")
+                except Exception as e:
+                    self.logger.warning(f"Failed to save debug HTML file: {e}")
+                    
                 # Clean up temporary file
-                # Commented out for debugging - keep HTML files for inspection
-                # if os.path.exists(html_file):
-                #     os.remove(html_file)
-                self.logger.info(f"Temporary HTML file kept for debugging: {html_file}")
+                if os.path.exists(html_file):
+                    os.remove(html_file)
                     
         except Exception as e:
             self.logger.error(f"Selenium rendering failed: {str(e)}")
@@ -580,26 +587,6 @@ class MermaidPNGGenerator:
 </body>
 </html>
 """
-    
-    def _save_clean_mermaid_code(self, mermaid_code: str, png_filepath: str) -> None:
-        """
-        Save clean Mermaid code to a separate .mmd file.
-        
-        Args:
-            mermaid_code: Mermaid diagram code
-            png_filepath: Path to the generated PNG file
-        """
-        try:
-            # Create .mmd file path
-            mmd_filepath = os.path.splitext(png_filepath)[0] + ".mmd"
-            
-            # Write clean mermaid code
-            with open(mmd_filepath, 'w', encoding='utf-8') as f:
-                f.write(mermaid_code)
-            
-            self.logger.info(f"Saved clean Mermaid code to: {mmd_filepath}")
-        except Exception as e:
-            self.logger.warning(f"Failed to save clean Mermaid code: {str(e)}")
     
     def is_available(self) -> bool:
         """

@@ -2,7 +2,7 @@
 # Python 3.6+ compatible
 
 # Core dependencies
-javalang==0.13.1
+javalang==0.13.0
 requests==2.27.1
 click==8.0.4
 

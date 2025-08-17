@@ -166,6 +166,24 @@ class SimplePNGGenerator:
                 node_id = line[:start].strip()
                 node = {'id': node_id, 'label': match, 'type': 'decision'}
         
+        # Diamond { }
+        elif '{' in line and '}' in line:
+            start = line.find('{')
+            end = line.rfind('}')
+            if start < end:
+                match = line[start+1:end]
+                node_id = line[:start].strip()
+                node = {'id': node_id, 'label': match, 'type': 'decision'}
+        
+        # Parallelogram / /
+        elif '/' in line and '/' in line[line.find('/')+1:]:
+            start = line.find('/')
+            end = line.rfind('/')
+            if start < end:
+                match = line[start+1:end]
+                node_id = line[:start].strip()
+                node = {'id': node_id, 'label': match, 'type': 'process'}
+        
         # Rectangle [ ] or [[ ]]
         elif '[' in line and ']' in line:
             start = line.find('[')
@@ -195,7 +213,7 @@ class SimplePNGGenerator:
         label = ""
         
         # Handle labels like: A -->|label| B or A --> B
-        if '|' in target_part and ']' in target_part:
+        if '|' in target_part:
             # Has label
             label_start = target_part.find('|')
             label_end = target_part.find('|', label_start + 1)
@@ -208,7 +226,7 @@ class SimplePNGGenerator:
             target = target_part
             
         # Clean up target (remove brackets, etc)
-        target = target.split('[')[0].split('{')[0].split('(')[0].strip()
+        target = target.split('[')[0].split('{')[0].split('(')[0].split('/')[0].strip()
         
         return {
             'source': source,

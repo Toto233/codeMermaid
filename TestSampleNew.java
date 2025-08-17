@@ -20,6 +20,18 @@ public class TestSampleNew {
     /**
      * Method flowchart visualization.
      *
+    /**
+     * Method flowchart visualization.
+     *
+    /**
+     * Method flowchart visualization.
+     *
+    /**
+     * Method flowchart visualization.
+     *
+    /**
+     * Method flowchart visualization.
+     *
      * @mermaid
      * ```mermaid
      * flowchart TD
@@ -32,19 +44,18 @@ public class TestSampleNew {
      * ProcMulti[调用processMultipleValues]
      * InitLoop[/i初始化为0/]
      * CheckLoop{i < value}
-     * AppendIndex[追加"_"+i]
-     * CheckEven{i为偶数}
+     * AppendIndex[追加“_i”]
+     * IsEven{i为偶数}
      * ToUpper[转大写]
      * ToLower[转小写]
-     * IncrI[/i自增/]
+     * IncrI[/i++/]
      * TryRisky{调用riskyOperation}
-     * CatchEx[捕获RuntimeException并置result为"error"]
+     * CatchEx[捕获RuntimeException并置result为“error”]
      * IncrCounter[counter自增]
      * End((返回result))
      * Start --> ValidateInput
      * ValidateInput -->|是| ThrowEx
      * ValidateInput -->|否| SwitchValue
-     * ThrowEx -.-> End
      * SwitchValue -->|1| ProcSingle
      * SwitchValue -->|2| ProcDouble
      * SwitchValue -->|其他| ProcMulti
@@ -52,14 +63,14 @@ public class TestSampleNew {
      * ProcDouble --> InitLoop
      * ProcMulti --> InitLoop
      * InitLoop --> CheckLoop
+     * CheckLoop -->|否| TryRisky
      * CheckLoop -->|是| AppendIndex
-     * AppendIndex --> CheckEven
-     * CheckEven -->|是| ToUpper
-     * CheckEven -->|否| ToLower
+     * AppendIndex --> IsEven
+     * IsEven -->|是| ToUpper
+     * IsEven -->|否| ToLower
      * ToUpper --> IncrI
      * ToLower --> IncrI
      * IncrI --> CheckLoop
-     * CheckLoop -->|否| TryRisky
      * TryRisky -->|正常| IncrCounter
      * TryRisky -.->|RuntimeException| CatchEx
      * CatchEx --> IncrCounter

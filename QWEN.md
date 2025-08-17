@@ -434,16 +434,16 @@ java-mermaid MyClass myMethod MyFile.java --output-dir ./docs/flowcharts/
 - 应用配置标志
 
 ### 文件写入器 (core/file_writer.py)
-- 生成PNG图像（使用simple_png_generator）
+- 生成PNG图像（使用mermaid_cli_png_generator）
 - 将Mermaid图表作为注释插入Java源文件
 - 支持JavaDoc和普通注释格式
 - 处理文件系统操作
 
-### 简单PNG生成器 (core/simple_png_generator.py)
-- 使用PIL/Pillow创建基本流程图图像
-- 解析Mermaid代码为节点和边
+### Mermaid CLI PNG生成器 (core/mermaid_cli_png_generator.py)
+- 使用Mermaid CLI创建高质量流程图图像
+- 使用Selenium进行浏览器渲染作为备选方案
+- 保留HTML调试文件以诊断渲染问题
 - 创建可视化流程图
-- 在解析失败时创建文本备份PNG
 
 ## 配置和环境
 
@@ -551,6 +551,22 @@ Error: Method 'myMethod' not found in class 'MyClass'
 ```
 **解决方案**: 检查方法名称拼写并确保方法在类中存在。
 
+### 调试PNG生成问题
+
+当PNG生成失败时，系统会生成HTML调试文件，可用于诊断问题：
+
+1. 查看输出目录中的`*_debug.html`文件
+2. 将HTML文件复制到Windows环境
+3. 用浏览器打开HTML文件查看Mermaid图表渲染情况
+4. 检查浏览器控制台错误信息
+5. 验证Mermaid语法是否正确
+
+这种方法可以帮助识别：
+- Mermaid语法错误
+- 字符编码问题
+- 浏览器兼容性问题
+- 渲染引擎问题
+
 ## 性能提示
 
 - **大方法**: 考虑拆分非常大的方法（>1000行）
@@ -591,3 +607,11 @@ source venv/bin/activate  # 在Windows上: venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e ".[dev]"
 ```
+
+## 开发环境说明
+
+开发环境是在WSL (Windows Subsystem for Linux) 中的Linux系统。由于WSL环境的限制，无法直接在开发环境中进行浏览器展示或GUI操作。
+
+对于需要浏览器展示或GUI操作的测试，请编写测试程序并提供明确的调用说明，由开发者在外部Windows环境中运行测试。
+
+请勿在开发环境中尝试需要浏览器或GUI的操作，以避免不必要的错误和资源消耗。
