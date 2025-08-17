@@ -18,16 +18,6 @@ public class TestSampleNew {
         }
     }
     /**
-    /**
-     * Method flowchart visualization.
-     *
-    /**
-     * Method flowchart visualization.
-     *
-    /**
-     * Method flowchart visualization.
-     *
-    /**
      * Method flowchart visualization.
      *
      * @mermaid
@@ -42,13 +32,13 @@ public class TestSampleNew {
      * ProcMulti[调用processMultipleValues]
      * InitLoop[/i初始化为0/]
      * CheckLoop{i < value}
-     * AppendIndex[追加“_i”]
+     * AppendIndex[追加"_"+i]
      * CheckEven{i为偶数}
      * ToUpper[转大写]
      * ToLower[转小写]
      * IncrI[/i自增/]
-     * TryRisky{try riskyOperation}
-     * CatchEx[捕获RuntimeException并置result为“error”]
+     * TryRisky{调用riskyOperation}
+     * CatchEx[捕获RuntimeException并置result为"error"]
      * IncrCounter[counter自增]
      * End((返回result))
      * Start --> ValidateInput
@@ -71,7 +61,7 @@ public class TestSampleNew {
      * IncrI --> CheckLoop
      * CheckLoop -->|否| TryRisky
      * TryRisky -->|正常| IncrCounter
-     * TryRisky -.->|异常| CatchEx
+     * TryRisky -.->|RuntimeException| CatchEx
      * CatchEx --> IncrCounter
      * IncrCounter --> End
      * ```
@@ -164,19 +154,18 @@ public class TestSampleNew {
         return result;
     }
     /**
-    /**
      * Method flowchart visualization.
      *
      * @mermaid
      * ```mermaid
      * flowchart TD
-     * A((Start)) --> B{username == null\nor\nusername.isEmpty()}
-     * B -->|true| C[/"return \"Invalid username\""\]
-     * B -->|false| D{password == null\nor\npassword.length() < 8}
-     * D -->|true| E[/"return \"Password too short\""\]
-     * D -->|false| F{!password.matches\n(".*[A-Z].*")}
-     * F -->|true| G[/"return \"Missing uppercase letter\""\]
-     * F -->|false| H[/"return \"Valid user\""\]
+     * A((Start)) --> B{username == null or username.isEmpty()}
+     * B -->|true| C[/return "Invalid username"/]
+     * B -->|false| D{password == null or password.length() < 8}
+     * D -->|true| E[/return "Password too short"/]
+     * D -->|false| F{!password.matches("\\\\.*[A-Z].*")}
+     * F -->|true| G[/return "Missing uppercase letter"/]
+     * F -->|false| H[/return "Valid user"/]
      * C --> I((End))
      * E --> I
      * G --> I
