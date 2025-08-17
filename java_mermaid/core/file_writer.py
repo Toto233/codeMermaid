@@ -238,6 +238,9 @@ class FileWriter:
                     if lines[j].strip() == '*/':
                         remove_end_idx = j
                         break
+                # If we found a start but not an end, that's an error - let's be safe and not remove anything
+                if remove_end_idx == -1:
+                    remove_start_idx = -1
                 break
         
         # Remove existing Mermaid comment if found
@@ -253,9 +256,13 @@ class FileWriter:
                 # Skip empty lines
                 if not line.strip():
                     continue
-                if not line.strip().startswith('//') and not line.strip().startswith('/*') and not line.strip().startswith('*'):
+                # If we find a non-comment line, this is our insertion point
+                if not line.strip().startswith('//') and not line.strip().startswith('/*') and not line.strip().startswith('*') and not line.strip().startswith('*/'):
                     insert_idx = i + 1
                     break
+                # If we find the start of a comment block, continue searching
+                if line.strip().startswith('/*'):
+                    continue
             
             # Insert the comment block
             new_lines = lines[:insert_idx] + comment_block + lines[insert_idx:]

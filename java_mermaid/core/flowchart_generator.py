@@ -35,7 +35,9 @@ class FlowchartGenerator:
         generate_png: bool = True,
         generate_comments: bool = True,
         generate_javadoc: bool = True,
-        verbose: bool = False
+        verbose: bool = False,
+        width: int = 1200,
+        height: int = 800
     ):
         """
         Initialize the FlowchartGenerator with configuration.
@@ -49,8 +51,12 @@ class FlowchartGenerator:
             generate_comments: Whether to generate any comments
             generate_javadoc: Whether to generate JavaDoc comments
             verbose: Enable verbose logging
+            width: PNG image width in pixels
+            height: PNG image height in pixels
         """
         self.logger = get_logger(verbose=verbose)
+        self.width = width
+        self.height = height
         
         # Initialize components
         self.java_extractor = JavaCodeExtractor()
@@ -134,7 +140,9 @@ class FlowchartGenerator:
                     png_path = self.file_writer.write_png(
                         mermaid_code=mermaid_code,
                         class_name=class_name,
-                        method_name=method_name
+                        method_name=method_name,
+                        width=self.width,
+                        height=self.height
                     )
                     if png_path:
                         self.logger.info(f"Successfully generated PNG: {png_path}")
