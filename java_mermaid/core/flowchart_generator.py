@@ -149,9 +149,9 @@ class FlowchartGenerator:
                     else:
                         self.logger.info("PNG generation skipped - no high-quality rendering method available")
                 
-                # Only generate comments if comments are enabled
+                # Only generate comments if JavaDoc is enabled
                 # When --doc-off is used, this should be False
-                if self.output_manager.should_generate_comments():
+                if self.output_manager.should_generate_javadoc():
                     self.logger.debug("Calling write_comments with generate_javadoc=" + 
                                     str(self.output_manager.should_generate_javadoc()))
                     self.file_writer.write_comments(
@@ -162,7 +162,7 @@ class FlowchartGenerator:
                         generate_javadoc=self.output_manager.should_generate_javadoc()
                     )
                 else:
-                    self.logger.debug("Skipping comment generation (comments disabled)")
+                    self.logger.debug("Skipping comment generation (JavaDoc disabled)")
             except Exception as e:
                 raise OutputError(f"Failed to generate outputs: {str(e)}")
             
